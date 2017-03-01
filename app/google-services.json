@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "50399234865",
+    "project_id": "contacts-8596f"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50399234865:android:ee37d972346ef321",
+        "android_client_info": {
+          "package_name": "com.example.alexey.contacts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50399234865-9otou0puhfj7jsu1q0hen98llk19rono.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alexey.contacts",
+            "certificate_hash": "01823bab76dca0c8f6461a761f56c43d46474d8a"
+          }
+        },
+        {
+          "client_id": "50399234865-r47tbuqj6k0phahmki1vj8o2qmlo2rio.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbT4zRfjwwTjOXZsiTK4SrUb3C1wHPc4Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
