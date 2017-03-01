@@ -1,6 +1,6 @@
-package com.example.alexey.contacts.login;
+package com.example.alexey.contacts.activities.login;
 
-import com.example.alexey.contacts.BaseRelations;
+import com.example.alexey.contacts.activities.BaseRelations;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 /**
@@ -9,15 +9,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 public interface LoginRelations {
 
-    interface Presenter extends BaseRelations.Presenter{
+    interface Presenter extends BaseRelations.Presenter {
 
         void logIn();
 
         void handleSignInResult(GoogleSignInResult result);
     }
 
-    interface View extends BaseRelations.Presenter{
-        
+    interface View extends BaseRelations.View {
+
     }
 
 }

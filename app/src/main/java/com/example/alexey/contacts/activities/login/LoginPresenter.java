@@ -1,10 +1,10 @@
-package com.example.alexey.contacts.login;
+package com.example.alexey.contacts.activities.login;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.example.alexey.contacts.R;
-import com.example.alexey.contacts.contacts.ContactsAcitivty;
+import com.example.alexey.contacts.activities.contacts.ContactsActivity;
 import com.example.alexey.contacts.utils.ToastUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -61,7 +61,7 @@ public class LoginPresenter implements
     }
 
     private void startContactsActivity() {
-        Intent intent = new Intent(mView.getActivity(), ContactsAcitivty.class);
+        Intent intent = new Intent(mView.getActivity(), ContactsActivity.class);
         mView.getActivity().startActivity(intent);
     }
 

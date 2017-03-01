@@ -1,4 +1,4 @@
-package com.example.alexey.contacts;
+package com.example.alexey.contacts.activities;
 
 import android.support.v7.app.AppCompatActivity;
 

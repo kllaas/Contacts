@@ -1,11 +1,11 @@
-package com.example.alexey.contacts.login;
+package com.example.alexey.contacts.activities.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.alexey.contacts.BaseActivity;
 import com.example.alexey.contacts.R;
+import com.example.alexey.contacts.activities.BaseActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 

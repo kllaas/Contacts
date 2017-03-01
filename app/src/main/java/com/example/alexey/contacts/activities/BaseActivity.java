@@ -1,7 +1,9 @@
-package com.example.alexey.contacts;
+package com.example.alexey.contacts.activities;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.alexey.contacts.R;
 
 /**
  * Created by alexey on 01/03/17.
