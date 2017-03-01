@@ -33,5 +33,6 @@ public final class NotesPersistenceContract {
         public static final String LAST_NAME_COLUMN = "content";
         public static final String EMAIL_COLUMN = "image";
         public static final String PHONE_COLUMN = "image_local";
+
     }
 }
