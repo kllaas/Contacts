@@ -1,14 +1,13 @@
 package com.example.alexey.contacts.activities.contacts;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.example.alexey.contacts.R;
 import com.example.alexey.contacts.activities.BaseActivity;
@@ -43,20 +42,6 @@ public class ContactsActivity extends BaseActivity implements ContactsRelations.
         mPresenter.loadData();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        MenuItem item = menu.findItem(R.id.spinner);
-        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-        return true;
-    }
 
     @Override
     public void setEmptyListMessage(boolean visible) {
@@ -70,4 +55,48 @@ public class ContactsActivity extends BaseActivity implements ContactsRelations.
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sort:
+                createSortDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void createSortDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(R.string.dialog_sort_title)
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.cancel())
+                .setItems(R.array.spinner_list_item_array, (dialog, which) -> {
+
+                    SORT_TYPE type = SORT_TYPE.WITHOUT_SORT;
+
+                    switch (which) {
+                        case 0:
+                            type = SORT_TYPE.WITHOUT_SORT;
+                            break;
+                        case 1:
+                            type = SORT_TYPE.BY_ALPHABET;
+                            break;
+                        case 2:
+                            type = SORT_TYPE.BY_ALPHABET_DESC;
+                            break;
+                    }
+
+                    mPresenter.setCurrentSortType(type);
+                });
+
+        builder.create().show();
+    }
 }

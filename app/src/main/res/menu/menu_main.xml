@@ -1,13 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".activities.notes.NotesActivity">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/spinner"
-        android:background="@color/colorAccent"
-        android:title="ActionBar Spinner"
-        app:actionViewClass="android.widget.Spinner"
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/ic_sort_24dp"
+        android:title="@string/sort"
         app:showAsAction="always"/>
 
 </menu>

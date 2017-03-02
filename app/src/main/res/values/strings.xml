@@ -3,5 +3,11 @@
     <string name="message_loading">Loading…</string>
     <string name="message_auth_failed">Sign in was faled ¯\\(°_o)/¯</string>
     <string name="title_activity_contacts_acitivty">ContactsAcitivty</string>
-    <string name="message_no_data">There is no any contact yet</string>
+    <string name="message_no_data">There is no any contact yet…</string>
+    <string name="sort">Sort</string>
+    <string name="without_sort">Not sorted</string>
+    <string name="menu_alphabet">By alphabet</string>
+    <string name="menu_alphabet_desc">By alphabet desc</string>
+    <string name="dialog_sort_title">Sort by…</string>
+    <string name="cancel">Cancel</string>
 </resources>

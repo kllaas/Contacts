@@ -6,7 +6,7 @@ package com.example.alexey.contacts.activities.contacts;
 
 public enum SORT_TYPE {
 
-    ALL,
+    WITHOUT_SORT,
     BY_ALPHABET,
     BY_ALPHABET_DESC,
 
