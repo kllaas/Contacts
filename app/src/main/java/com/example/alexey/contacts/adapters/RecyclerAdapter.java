@@ -26,22 +26,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         mContacts = contacts;
     }
 
-    /**
-     * Create new views (invoked by the layout manager)
-     */
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
-        // Create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.contact_item, parent, false);
 
         return new ViewHolder(v);
     }
 
-    /**
-     * Set element from mContacts at this position of RecyclerView
-     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int p) {
         int position = holder.getAdapterPosition();
@@ -57,10 +50,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 .setText(mContacts.get(position).getEmail());
     }
 
-
-    /**
-     * Return the counts of items
-     */
     @Override
     public int getItemCount() {
         return mContacts.size();

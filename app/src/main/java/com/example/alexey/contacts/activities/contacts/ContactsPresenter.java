@@ -30,7 +30,7 @@ public class ContactsPresenter implements ContactsRelations.Presenter {
 
     private CompositeSubscription mSubscriptions;
 
-    private SORT_TYPE mCurrentSortType = SORT_TYPE.WITHOUT_SORT;
+    private ContactsSortType mCurrentSortType = ContactsSortType.WITHOUT_SORT;
 
     ContactsPresenter(ContactsRelations.View view, BaseSchedulerProvider schedulerProvider) {
         mView = view;
@@ -80,7 +80,7 @@ public class ContactsPresenter implements ContactsRelations.Presenter {
     }
 
     @Override
-    public void setCurrentSortType(SORT_TYPE type) {
+    public void setCurrentSortType(ContactsSortType type) {
         mCurrentSortType = type;
         loadData();
     }

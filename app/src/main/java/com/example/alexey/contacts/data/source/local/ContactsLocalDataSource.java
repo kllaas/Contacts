@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.example.alexey.contacts.activities.contacts.SORT_TYPE;
+import com.example.alexey.contacts.activities.contacts.ContactsSortType;
 import com.example.alexey.contacts.data.Contact;
 import com.example.alexey.contacts.data.source.ContactsDataSource;
 import com.example.alexey.contacts.data.source.local.ContactPersistenceContract.ContactEntry;
@@ -58,14 +58,12 @@ public class ContactsLocalDataSource implements ContactsDataSource {
     }
 
     @Override
-    public Observable<List<Contact>> getContacts(SORT_TYPE type) {
+    public Observable<List<Contact>> getContacts(ContactsSortType type) {
 
-        Observable<List<Contact>> localTasks = getNotesFromDB(type);
-
-        return localTasks.first();
+        return getNotesFromDB(type).first();
     }
 
-    private Observable<List<Contact>> getNotesFromDB(SORT_TYPE type) {
+    private Observable<List<Contact>> getNotesFromDB(ContactsSortType type) {
         String[] projection = {
                 ContactEntry.COLUMN_NAME_ENTRY_ID,
                 ContactEntry.FIRST_NAME_COLUMN,

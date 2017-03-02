@@ -19,7 +19,7 @@ public interface ContactsRelations {
 
         RecyclerView.Adapter loadAdapter(List<Contact> notes);
 
-        void setCurrentSortType(SORT_TYPE type);
+        void setCurrentSortType(ContactsSortType type);
 
         void showCreateFragment();
     }

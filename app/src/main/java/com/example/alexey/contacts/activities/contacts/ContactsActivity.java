@@ -92,17 +92,17 @@ public class ContactsActivity extends BaseActivity implements ContactsRelations.
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.cancel())
                 .setItems(R.array.spinner_list_item_array, (dialog, which) -> {
 
-                    SORT_TYPE type = SORT_TYPE.WITHOUT_SORT;
+                    ContactsSortType type = ContactsSortType.WITHOUT_SORT;
 
                     switch (which) {
                         case 0:
-                            type = SORT_TYPE.WITHOUT_SORT;
+                            type = ContactsSortType.WITHOUT_SORT;
                             break;
                         case 1:
-                            type = SORT_TYPE.BY_ALPHABET;
+                            type = ContactsSortType.BY_ALPHABET;
                             break;
                         case 2:
-                            type = SORT_TYPE.BY_ALPHABET_DESC;
+                            type = ContactsSortType.BY_ALPHABET_DESC;
                             break;
                     }
 

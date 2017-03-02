@@ -34,7 +34,7 @@ public class LoginPresenter implements
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(mView.getActivity())
-                .enableAutoManage(mView.getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .enableAutoManage(mView.getActivity(), this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }

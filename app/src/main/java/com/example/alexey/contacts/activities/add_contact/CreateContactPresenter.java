@@ -57,5 +57,4 @@ public class CreateContactPresenter implements Presenter {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-
 }
