@@ -21,6 +21,7 @@ public interface ContactsRelations {
 
         void setCurrentSortType(SORT_TYPE type);
 
+        void showCreateFragment();
     }
 
     interface View extends BaseRelations.View {
@@ -29,6 +30,10 @@ public interface ContactsRelations {
 
         void refreshData(List<Contact> contacts);
 
+    }
+
+    interface OnCompleteListener {
+        void onContactCreated();
     }
 
 }

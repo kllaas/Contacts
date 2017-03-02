@@ -1,7 +1,9 @@
 package com.example.alexey.contacts.activities.contacts;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.alexey.contacts.activities.add_contact.CreateContactDialog;
 import com.example.alexey.contacts.adapters.RecyclerAdapter;
 import com.example.alexey.contacts.data.Contact;
 import com.example.alexey.contacts.data.source.local.ContactsLocalDataSource;
@@ -81,6 +83,12 @@ public class ContactsPresenter implements ContactsRelations.Presenter {
     public void setCurrentSortType(SORT_TYPE type) {
         mCurrentSortType = type;
         loadData();
+    }
+
+    @Override
+    public void showCreateFragment() {
+        DialogFragment newFragment = CreateContactDialog.newInstance();
+        newFragment.show(mView.getActivity().getSupportFragmentManager(), "dialog");
     }
 
     @Override

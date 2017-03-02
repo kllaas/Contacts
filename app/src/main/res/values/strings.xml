@@ -10,4 +10,12 @@
     <string name="menu_alphabet_desc">By alphabet desc</string>
     <string name="dialog_sort_title">Sort by…</string>
     <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="dialog_create_title">Create contact</string>
+    <string name="first_name">First name</string>
+    <string name="second_name">Second name</string>
+    <string name="phone">Phone number</string>
+    <string name="email">Email address</string>
+    <string name="message_not_valid_email">Email isn`t valid</string>
+    <string name="message_not_valid_name">Fill at least the contact name</string>
 </resources>

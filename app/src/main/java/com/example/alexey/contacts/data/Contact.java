@@ -1,5 +1,7 @@
 package com.example.alexey.contacts.data;
 
+import java.util.UUID;
+
 /**
  * Created by alexey on 02/03/17.
  */
@@ -16,8 +18,16 @@ public class Contact {
 
     private String phone;
 
-    public Contact(String id, String firstName, String lastName, String email, String phone) {
+    public Contact(String id, String firstName, String lastName, String phone, String email) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public Contact(String firstName, String lastName, String phone, String email) {
+        this.id = UUID.randomUUID().toString();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

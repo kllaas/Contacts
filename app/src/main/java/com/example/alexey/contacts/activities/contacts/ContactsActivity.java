@@ -2,6 +2,7 @@ package com.example.alexey.contacts.activities.contacts;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,13 +19,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class ContactsActivity extends BaseActivity implements ContactsRelations.View {
+public class ContactsActivity extends BaseActivity implements ContactsRelations.View, ContactsRelations.OnCompleteListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+
     @BindView(R.id.no_data_container)
     View mNoDataView;
+
     private ContactsRelations.Presenter mPresenter;
 
     @Override
@@ -37,6 +41,9 @@ public class ContactsActivity extends BaseActivity implements ContactsRelations.
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mPresenter = new ContactsPresenter(this, SchedulerProvider.getInstance());
         mPresenter.loadData();
@@ -73,6 +80,11 @@ public class ContactsActivity extends BaseActivity implements ContactsRelations.
         }
     }
 
+    @OnClick(R.id.fab)
+    public void onClick() {
+        mPresenter.showCreateFragment();
+    }
+
     private void createSortDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -98,5 +110,10 @@ public class ContactsActivity extends BaseActivity implements ContactsRelations.
                 });
 
         builder.create().show();
+    }
+
+    @Override
+    public void onContactCreated() {
+        mPresenter.loadData();
     }
 }

@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.alexey.contacts.activities.contacts.SORT_TYPE;
 import com.example.alexey.contacts.data.Contact;
@@ -44,10 +43,8 @@ import rx.functions.Func1;
  */
 public class ContactsLocalDataSource implements ContactsDataSource {
 
+    public static Map<String, Contact> mCachedContacts;
     private static ContactsLocalDataSource INSTANCE;
-
-    private static Map<String, Contact> mCachedContacts;
-
     private final BriteDatabase mDatabaseHelper;
 
     private Func1<Cursor, Contact> mContactMapperFunction;
@@ -81,9 +78,14 @@ public class ContactsLocalDataSource implements ContactsDataSource {
 
     private Observable<List<Contact>> getAndCacheLocalNotes(SORT_TYPE type) {
         return getNotesFromDB(type)
-                .flatMap(tasks -> Observable.from(tasks)
-                        .doOnNext(task -> Log.d("LocalDB", task.getId()))
-                        .toList());
+                .flatMap(new Func1<List<Contact>, Observable<List<Contact>>>() {
+                    @Override
+                    public Observable<List<Contact>> call(List<Contact> contacts) {
+                        return Observable.from(contacts)
+                                .doOnNext(task -> mCachedContacts.put(task.getId(), task))
+                                .toList();
+                    }
+                });
     }
 
 
@@ -123,7 +125,7 @@ public class ContactsLocalDataSource implements ContactsDataSource {
         String phone =
                 c.getString(c.getColumnIndexOrThrow(ContactEntry.PHONE_COLUMN));
 
-        return new Contact(itemId, f_name, l_name, email, phone);
+        return new Contact(itemId, f_name, l_name, phone, email);
     }
 
     public Observable<Contact> getContacts(@NonNull String id) {
@@ -152,5 +154,7 @@ public class ContactsLocalDataSource implements ContactsDataSource {
         values.put(ContactEntry.PHONE_COLUMN, contact.getPhone());
 
         mDatabaseHelper.insert(ContactEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+        mCachedContacts.put(contact.getId(), contact);
     }
 }
