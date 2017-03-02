@@ -1,6 +1,5 @@
 package com.example.alexey.contacts.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +20,10 @@ import butterknife.ButterKnife;
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private static final String TAG = "mRecyclerAdapter";
-
     private List<Contact> mContacts;
 
-    private Context mContext;
-
-    public RecyclerAdapter(List<Contact> contacts, Context context) {
+    public RecyclerAdapter(List<Contact> contacts) {
         mContacts = contacts;
-        mContext = context;
     }
 
     /**

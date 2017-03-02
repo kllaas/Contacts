@@ -21,9 +21,9 @@ import android.provider.BaseColumns;
 /**
  * The contract used for the db to save the Notes locally.
  */
-public final class NotesPersistenceContract {
+public final class ContactPersistenceContract {
 
-    private NotesPersistenceContract() {
+    private ContactPersistenceContract() {
     }
 
     public static abstract class ContactEntry implements BaseColumns {

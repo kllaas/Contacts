@@ -22,15 +22,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.example.alexey.contacts.activities.contacts.SORT_TYPE;
 import com.example.alexey.contacts.data.Contact;
 import com.example.alexey.contacts.data.source.ContactsDataSource;
-import com.example.alexey.contacts.data.source.local.NotesPersistenceContract.ContactEntry;
+import com.example.alexey.contacts.data.source.local.ContactPersistenceContract.ContactEntry;
 import com.example.alexey.contacts.utils.schedulers.BaseSchedulerProvider;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -41,6 +45,8 @@ import rx.functions.Func1;
 public class ContactsLocalDataSource implements ContactsDataSource {
 
     private static ContactsLocalDataSource INSTANCE;
+
+    private static Map<String, Contact> mCachedContacts;
 
     private final BriteDatabase mDatabaseHelper;
 
@@ -61,7 +67,27 @@ public class ContactsLocalDataSource implements ContactsDataSource {
     }
 
     @Override
-    public Observable<List<Contact>> getContacts() {
+    public Observable<List<Contact>> getContacts(SORT_TYPE type) {
+        if (mCachedContacts != null) {
+            return Observable.from(mCachedContacts.values()).toList();
+        } else {
+            mCachedContacts = new LinkedHashMap<>();
+        }
+
+        Observable<List<Contact>> localTasks = getAndCacheLocalNotes(type);
+
+        return localTasks.first();
+    }
+
+    private Observable<List<Contact>> getAndCacheLocalNotes(SORT_TYPE type) {
+        return getNotesFromDB(type)
+                .flatMap(tasks -> Observable.from(tasks)
+                        .doOnNext(task -> Log.d("LocalDB", task.getId()))
+                        .toList());
+    }
+
+
+    private Observable<List<Contact>> getNotesFromDB(SORT_TYPE type) {
         String[] projection = {
                 ContactEntry.COLUMN_NAME_ENTRY_ID,
                 ContactEntry.FIRST_NAME_COLUMN,
@@ -70,7 +96,18 @@ public class ContactsLocalDataSource implements ContactsDataSource {
                 ContactEntry.PHONE_COLUMN,
         };
 
-        String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), ContactEntry.TABLE_NAME);
+        String order = "";
+
+        switch (type) {
+            case BY_ALPHABET:
+                order = " order by " + ContactEntry.FIRST_NAME_COLUMN;
+                break;
+            case BY_ALPHABET_DESC:
+                order = " order by " + ContactEntry.FIRST_NAME_COLUMN + " DESC";
+                break;
+        }
+
+        String sql = String.format("SELECT %s FROM %s" + order, TextUtils.join(",", projection), ContactEntry.TABLE_NAME);
         return mDatabaseHelper.createQuery(ContactEntry.TABLE_NAME, sql)
                 .mapToList(mContactMapperFunction);
     }
@@ -86,12 +123,10 @@ public class ContactsLocalDataSource implements ContactsDataSource {
         String phone =
                 c.getString(c.getColumnIndexOrThrow(ContactEntry.PHONE_COLUMN));
 
-        Contact note = new Contact(itemId, f_name, l_name, email, phone);
-
-        return note;
+        return new Contact(itemId, f_name, l_name, email, phone);
     }
 
-    public Observable<Contact> getContacts(@NonNull String noteId) {
+    public Observable<Contact> getContacts(@NonNull String id) {
 
         String[] projection = {
                 ContactEntry.COLUMN_NAME_ENTRY_ID,
@@ -103,18 +138,18 @@ public class ContactsLocalDataSource implements ContactsDataSource {
 
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), ContactEntry.TABLE_NAME, ContactEntry.COLUMN_NAME_ENTRY_ID);
-        return mDatabaseHelper.createQuery(ContactEntry.TABLE_NAME, sql, noteId)
+        return mDatabaseHelper.createQuery(ContactEntry.TABLE_NAME, sql, id)
                 .mapToOneOrDefault(mContactMapperFunction, null);
     }
 
     @Override
-    public void saveContact(Contact note) {
+    public void saveContact(Contact contact) {
         ContentValues values = new ContentValues();
-        values.put(ContactEntry.COLUMN_NAME_ENTRY_ID, note.getId());
-        values.put(ContactEntry.FIRST_NAME_COLUMN, note.getFirstName());
-        values.put(ContactEntry.LAST_NAME_COLUMN, note.getLastName());
-        values.put(ContactEntry.EMAIL_COLUMN, note.getEmail());
-        values.put(ContactEntry.PHONE_COLUMN, note.getPhone());
+        values.put(ContactEntry.COLUMN_NAME_ENTRY_ID, contact.getId());
+        values.put(ContactEntry.FIRST_NAME_COLUMN, contact.getFirstName());
+        values.put(ContactEntry.LAST_NAME_COLUMN, contact.getLastName());
+        values.put(ContactEntry.EMAIL_COLUMN, contact.getEmail());
+        values.put(ContactEntry.PHONE_COLUMN, contact.getPhone());
 
         mDatabaseHelper.insert(ContactEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_REPLACE);
     }

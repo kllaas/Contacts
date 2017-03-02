@@ -2,7 +2,6 @@ package com.example.alexey.contacts.activities.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.example.alexey.contacts.R;
 import com.example.alexey.contacts.activities.BaseActivity;
@@ -44,8 +43,4 @@ public class LoginActivity extends BaseActivity implements LoginRelations.View {
         }
     }
 
-    @Override
-    public AppCompatActivity getActivity() {
-        return this;
-    }
 }

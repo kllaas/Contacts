@@ -30,13 +30,13 @@ public class ContactsDbHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + NotesPersistenceContract.ContactEntry.TABLE_NAME + " (" +
-                    NotesPersistenceContract.ContactEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
-                    NotesPersistenceContract.ContactEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-                    NotesPersistenceContract.ContactEntry.FIRST_NAME_COLUMN + TEXT_TYPE + COMMA_SEP +
-                    NotesPersistenceContract.ContactEntry.LAST_NAME_COLUMN + TEXT_TYPE + COMMA_SEP +
-                    NotesPersistenceContract.ContactEntry.EMAIL_COLUMN + TEXT_TYPE + COMMA_SEP +
-                    NotesPersistenceContract.ContactEntry.PHONE_COLUMN + TEXT_TYPE + COMMA_SEP +
+            "CREATE TABLE " + ContactPersistenceContract.ContactEntry.TABLE_NAME + " (" +
+                    ContactPersistenceContract.ContactEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    ContactPersistenceContract.ContactEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
+                    ContactPersistenceContract.ContactEntry.FIRST_NAME_COLUMN + TEXT_TYPE + COMMA_SEP +
+                    ContactPersistenceContract.ContactEntry.LAST_NAME_COLUMN + TEXT_TYPE + COMMA_SEP +
+                    ContactPersistenceContract.ContactEntry.EMAIL_COLUMN + TEXT_TYPE + COMMA_SEP +
+                    ContactPersistenceContract.ContactEntry.PHONE_COLUMN + TEXT_TYPE +
                     " )";
 
     public ContactsDbHelper(Context context) {

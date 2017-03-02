@@ -29,4 +29,8 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public AppCompatActivity getActivity() {
+        return this;
+    }
+
 }
