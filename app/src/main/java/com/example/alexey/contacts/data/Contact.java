@@ -18,12 +18,15 @@ public class Contact {
 
     private String phone;
 
-    public Contact(String id, String firstName, String lastName, String phone, String email) {
+    private String userId;
+
+    public Contact(String id, String firstName, String lastName, String email, String phone, String userId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.userId = userId;
     }
 
     public Contact(String firstName, String lastName, String phone, String email) {

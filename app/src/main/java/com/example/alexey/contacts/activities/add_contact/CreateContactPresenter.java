@@ -32,7 +32,7 @@ public class CreateContactPresenter implements Presenter {
     @Override
     public void tryToSave(String firstName, String secondName, String phone, String email) {
         if (fieldsValid(firstName, email)) {
-            mLocalDataSource.saveContact(new Contact(firstName, secondName, phone, email));
+            mLocalDataSource.saveContact(new Contact(firstName, secondName, phone, email), mView.getContext());
 
             mView.onSaved();
         }

@@ -52,7 +52,7 @@ public class ContactsPresenter implements ContactsRelations.Presenter {
 
         mSubscriptions.clear();
         Subscription subscription = mNotesRepository
-                .getContacts(mCurrentSortType)
+                .getContacts(mCurrentSortType, mView.getActivity())
                 .flatMap(new Func1<List<Contact>, Observable<Contact>>() {
                     @Override
                     public Observable<Contact> call(List<Contact> contacts) {

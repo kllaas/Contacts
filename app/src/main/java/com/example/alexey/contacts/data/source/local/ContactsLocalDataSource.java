@@ -27,6 +27,7 @@ import com.example.alexey.contacts.activities.contacts.ContactsSortType;
 import com.example.alexey.contacts.data.Contact;
 import com.example.alexey.contacts.data.source.ContactsDataSource;
 import com.example.alexey.contacts.data.source.local.ContactPersistenceContract.ContactEntry;
+import com.example.alexey.contacts.utils.PreferencesUtils;
 import com.example.alexey.contacts.utils.schedulers.BaseSchedulerProvider;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -58,18 +59,19 @@ public class ContactsLocalDataSource implements ContactsDataSource {
     }
 
     @Override
-    public Observable<List<Contact>> getContacts(ContactsSortType type) {
+    public Observable<List<Contact>> getContacts(ContactsSortType type, Context context) {
 
-        return getNotesFromDB(type).first();
+        return getNotesFromDB(type, context).first();
     }
 
-    private Observable<List<Contact>> getNotesFromDB(ContactsSortType type) {
+    private Observable<List<Contact>> getNotesFromDB(ContactsSortType type, Context context) {
         String[] projection = {
                 ContactEntry.COLUMN_NAME_ENTRY_ID,
                 ContactEntry.FIRST_NAME_COLUMN,
                 ContactEntry.LAST_NAME_COLUMN,
                 ContactEntry.EMAIL_COLUMN,
                 ContactEntry.PHONE_COLUMN,
+                ContactEntry.USER_ID_COLUMN,
         };
 
         String order = "";
@@ -83,7 +85,12 @@ public class ContactsLocalDataSource implements ContactsDataSource {
                 break;
         }
 
-        String sql = String.format("SELECT %s FROM %s" + order, TextUtils.join(",", projection), ContactEntry.TABLE_NAME);
+        String sql = String.format("SELECT %s FROM %s WHERE %s = '%s'" + order,
+                TextUtils.join(",", projection),
+                ContactEntry.TABLE_NAME,
+                ContactEntry.USER_ID_COLUMN,
+                PreferencesUtils.getData(PreferencesUtils.USER_ID, context));
+
         return mDatabaseHelper.createQuery(ContactEntry.TABLE_NAME, sql)
                 .mapToList(mContactMapperFunction);
     }
@@ -98,18 +105,22 @@ public class ContactsLocalDataSource implements ContactsDataSource {
                 c.getString(c.getColumnIndexOrThrow(ContactEntry.EMAIL_COLUMN));
         String phone =
                 c.getString(c.getColumnIndexOrThrow(ContactEntry.PHONE_COLUMN));
+        String userId =
+                c.getString(c.getColumnIndexOrThrow(ContactEntry.USER_ID_COLUMN));
 
-        return new Contact(itemId, f_name, l_name, phone, email);
+
+        return new Contact(itemId, f_name, l_name, phone, email, userId);
     }
 
     @Override
-    public void saveContact(Contact contact) {
+    public void saveContact(Contact contact, Context context) {
         ContentValues values = new ContentValues();
         values.put(ContactEntry.COLUMN_NAME_ENTRY_ID, contact.getId());
         values.put(ContactEntry.FIRST_NAME_COLUMN, contact.getFirstName());
         values.put(ContactEntry.LAST_NAME_COLUMN, contact.getLastName());
         values.put(ContactEntry.EMAIL_COLUMN, contact.getEmail());
         values.put(ContactEntry.PHONE_COLUMN, contact.getPhone());
+        values.put(ContactEntry.USER_ID_COLUMN, PreferencesUtils.getData(PreferencesUtils.USER_ID, context));
 
         mDatabaseHelper.insert(ContactEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_REPLACE);
 

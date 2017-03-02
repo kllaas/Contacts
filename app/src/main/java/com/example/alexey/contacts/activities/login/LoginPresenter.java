@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.alexey.contacts.R;
 import com.example.alexey.contacts.activities.contacts.ContactsActivity;
+import com.example.alexey.contacts.utils.PreferencesUtils;
 import com.example.alexey.contacts.utils.ToastUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,12 +24,12 @@ public class LoginPresenter implements
 
     private GoogleApiClient mGoogleApiClient;
 
-    LoginPresenter(LoginRelations.View view){
+    LoginPresenter(LoginRelations.View view) {
         mView = view;
     }
 
     @Override
-    public void configure(){
+    public void configure() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -48,6 +49,12 @@ public class LoginPresenter implements
     @Override
     public void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
+
+            PreferencesUtils.saveData(
+                    PreferencesUtils.USER_ID,
+                    result.getSignInAccount().getId(),
+                    mView.getActivity());
+
             startContactsActivity();
             return;
         }

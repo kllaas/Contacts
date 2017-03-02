@@ -36,6 +36,7 @@ public class ContactsDbHelper extends SQLiteOpenHelper {
                     ContactPersistenceContract.ContactEntry.FIRST_NAME_COLUMN + TEXT_TYPE + COMMA_SEP +
                     ContactPersistenceContract.ContactEntry.LAST_NAME_COLUMN + TEXT_TYPE + COMMA_SEP +
                     ContactPersistenceContract.ContactEntry.EMAIL_COLUMN + TEXT_TYPE + COMMA_SEP +
+                    ContactPersistenceContract.ContactEntry.USER_ID_COLUMN + TEXT_TYPE + COMMA_SEP +
                     ContactPersistenceContract.ContactEntry.PHONE_COLUMN + TEXT_TYPE +
                     " )";
 

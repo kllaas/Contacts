@@ -1,5 +1,7 @@
 package com.example.alexey.contacts.data.source;
 
+import android.content.Context;
+
 import com.example.alexey.contacts.activities.contacts.ContactsSortType;
 import com.example.alexey.contacts.data.Contact;
 
@@ -12,8 +14,8 @@ import rx.Observable;
  */
 public interface ContactsDataSource {
 
-    Observable<List<Contact>> getContacts(ContactsSortType mCurrentSortType);
+    Observable<List<Contact>> getContacts(ContactsSortType type, Context context);
 
-    void saveContact(Contact note);
+    void saveContact(Contact note, Context context);
 
 }
