@@ -31,19 +31,13 @@ import com.example.alexey.contacts.utils.schedulers.BaseSchedulerProvider;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.functions.Func1;
 
-/**
- * Concrete implementation of a data source as a db.
- */
 public class ContactsLocalDataSource implements ContactsDataSource {
 
-    public static Map<String, Contact> mCachedContacts;
     private static ContactsLocalDataSource INSTANCE;
     private final BriteDatabase mDatabaseHelper;
 
@@ -65,29 +59,11 @@ public class ContactsLocalDataSource implements ContactsDataSource {
 
     @Override
     public Observable<List<Contact>> getContacts(SORT_TYPE type) {
-        if (mCachedContacts != null) {
-            return Observable.from(mCachedContacts.values()).toList();
-        } else {
-            mCachedContacts = new LinkedHashMap<>();
-        }
 
-        Observable<List<Contact>> localTasks = getAndCacheLocalNotes(type);
+        Observable<List<Contact>> localTasks = getNotesFromDB(type);
 
         return localTasks.first();
     }
-
-    private Observable<List<Contact>> getAndCacheLocalNotes(SORT_TYPE type) {
-        return getNotesFromDB(type)
-                .flatMap(new Func1<List<Contact>, Observable<List<Contact>>>() {
-                    @Override
-                    public Observable<List<Contact>> call(List<Contact> contacts) {
-                        return Observable.from(contacts)
-                                .doOnNext(task -> mCachedContacts.put(task.getId(), task))
-                                .toList();
-                    }
-                });
-    }
-
 
     private Observable<List<Contact>> getNotesFromDB(SORT_TYPE type) {
         String[] projection = {
@@ -128,22 +104,6 @@ public class ContactsLocalDataSource implements ContactsDataSource {
         return new Contact(itemId, f_name, l_name, phone, email);
     }
 
-    public Observable<Contact> getContacts(@NonNull String id) {
-
-        String[] projection = {
-                ContactEntry.COLUMN_NAME_ENTRY_ID,
-                ContactEntry.FIRST_NAME_COLUMN,
-                ContactEntry.LAST_NAME_COLUMN,
-                ContactEntry.EMAIL_COLUMN,
-                ContactEntry.PHONE_COLUMN,
-        };
-
-        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
-                TextUtils.join(",", projection), ContactEntry.TABLE_NAME, ContactEntry.COLUMN_NAME_ENTRY_ID);
-        return mDatabaseHelper.createQuery(ContactEntry.TABLE_NAME, sql, id)
-                .mapToOneOrDefault(mContactMapperFunction, null);
-    }
-
     @Override
     public void saveContact(Contact contact) {
         ContentValues values = new ContentValues();
@@ -155,6 +115,5 @@ public class ContactsLocalDataSource implements ContactsDataSource {
 
         mDatabaseHelper.insert(ContactEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_REPLACE);
 
-        mCachedContacts.put(contact.getId(), contact);
     }
 }
