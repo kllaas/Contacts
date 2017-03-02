@@ -40,9 +40,11 @@ import rx.functions.Func1;
 public class ContactsLocalDataSource implements ContactsDataSource {
 
     private static ContactsLocalDataSource INSTANCE;
+
     private final BriteDatabase mDatabaseHelper;
 
     private Func1<Cursor, Contact> mContactMapperFunction;
+
 
     private ContactsLocalDataSource(@NonNull Context context, @NonNull BaseSchedulerProvider schedulerProvider) {
         ContactsDbHelper mDbHelper = new ContactsDbHelper(context);
@@ -74,22 +76,7 @@ public class ContactsLocalDataSource implements ContactsDataSource {
                 ContactEntry.USER_ID_COLUMN,
         };
 
-        String order = "";
-
-        switch (type) {
-            case BY_ALPHABET:
-                order = " order by " + ContactEntry.FIRST_NAME_COLUMN;
-                break;
-            case BY_ALPHABET_DESC:
-                order = " order by " + ContactEntry.FIRST_NAME_COLUMN + " DESC";
-                break;
-        }
-
-        String sql = String.format("SELECT %s FROM %s WHERE %s = '%s'" + order,
-                TextUtils.join(",", projection),
-                ContactEntry.TABLE_NAME,
-                ContactEntry.USER_ID_COLUMN,
-                PreferencesUtils.getData(PreferencesUtils.USER_ID, context));
+        String sql = getSqlRequest(type, context, projection);
 
         return mDatabaseHelper.createQuery(ContactEntry.TABLE_NAME, sql)
                 .mapToList(mContactMapperFunction);
@@ -110,6 +97,25 @@ public class ContactsLocalDataSource implements ContactsDataSource {
 
 
         return new Contact(itemId, f_name, l_name, phone, email, userId);
+    }
+
+    private String getSqlRequest(ContactsSortType type, Context context, String[] projection) {
+        String order = "";
+
+        switch (type) {
+            case BY_ALPHABET:
+                order = " order by " + ContactEntry.FIRST_NAME_COLUMN;
+                break;
+            case BY_ALPHABET_DESC:
+                order = " order by " + ContactEntry.FIRST_NAME_COLUMN + " DESC";
+                break;
+        }
+
+        return String.format("SELECT %s FROM %s WHERE %s = '%s'" + order,
+                TextUtils.join(",", projection),
+                ContactEntry.TABLE_NAME,
+                ContactEntry.USER_ID_COLUMN,
+                PreferencesUtils.getData(PreferencesUtils.USER_ID, context));
     }
 
     @Override
